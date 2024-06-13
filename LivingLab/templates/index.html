@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Better Harmony</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.min.js"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}" />
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+  </head>
+
+  <body>
+    <div class="chat-container">
+      <h1>외국인 노동자 법률 조언 챗</h1>
+      <form method="post">
+        <label for="topic">주제:</label>
+        <input type="text" id="topic" name="topic" required />
+        <button type="submit">전송</button>
+      </form>
+      <div>
+        <h2>실시간 응답 :</h2>
+        <div id="command-output" class="output-container"></div>
+      </div>
+    </div>
+  </body>
+</html>
