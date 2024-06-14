@@ -1,46 +1,31 @@
-name: Deploy Flask App
+name: Deploy to Heroku
 
 on:
   push:
     branches:
-      - main
+      - main # 메인 브랜치에 푸시될 때마다 트리거
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Test Flask app
+      - name: Deploy to Heroku
         env:
-          FLASK_APP: LivingLab
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
-          source venv/bin/activate
-          python -m unittest discover
-
-      - name: Build Docker image
-        run: docker build . -t my-flask-app
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          docker tag my-flask-app ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
+          git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+          git push heroku main
